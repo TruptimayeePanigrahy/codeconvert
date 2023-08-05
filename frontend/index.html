@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Code Converter</title>
+</head>
+<body>
+    <header>
+        <h1>Code Converter</h1>
+    </header>
+    <main>
+        <div class="upper">
+            <select id="languageSelect">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="React">React</option>
+            </select>
+            <button id="convertButton">Convert</button>
+            <button id="debugButton">Debug</button>
+            <button id="checkQualityButton">Check Quality</button>
+        </div>
+        <div class="lower">
+            <div class="editor" id="editor"></div>
+            <div class="output" id="output"></div>
+        </div>
+    </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.27.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            // Initialize the code editor
+            const editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '// Write your code here...',
+                language: 'javascript', // Default language
+                theme: 'vs-dark',
+            });
+
+           editor.getDomNode().style.borderRadius = "20px";
+            let convertButton=document.getElementById("convertButton")
+            
+            convertButton.addEventListener("click",()=>{
+                
+                let code=monaco.editor.getModels()[0].getValue()
+                const languageSelect = document.getElementById("languageSelect").value;
+                fetch("http://localhost:5678/code", {
+                    method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    code,
+                    languageSelect
+                })
+                })
+                .then((res) => res.json())
+                .then((data) =>{ 
+                    console.log(data.updatecode)
+                    document.getElementById("output").innerText=data.updatecode
+                })
+                .catch((error) => console.error("Error:", error));
+
+            })
+
+            let debugButton=document.getElementById("debugButton")
+            debugButton.addEventListener("click",()=>{
+                
+                let code=monaco.editor.getModels()[0].getValue()
+                fetch("http://localhost:5678/code/debug", {
+                    method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    code
+                    
+                })
+                })
+                .then((res) => res.json())
+                .then((data) =>{ 
+                    console.log(data.updatecode)
+                    document.getElementById("output").innerText=data.updatecode
+                })
+                .catch((error) => console.error("Error:", error));
+            })
+
+            checkQualityButton=document.getElementById("checkQualityButton")
+            checkQualityButton.addEventListener("click",()=>{
+                
+                let code=monaco.editor.getModels()[0].getValue()
+                fetch("http://localhost:5678/code/quality", {
+                    method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    code
+                    
+                })
+                })
+                .then((res) => res.json())
+                .then((data) =>{ 
+                    console.log(data.updatecode)
+                    document.getElementById("output").innerText=data.updatecode
+                })
+                .catch((error) => console.error("Error:", error));
+            })
+            // ... Rest of your button event listener code ...
+            
+
+            
+        })
+
+
+
+    </script>
+</body>
+</html>
