@@ -45,7 +45,7 @@
                 
                 let code=monaco.editor.getModels()[0].getValue()
                 const languageSelect = document.getElementById("languageSelect").value;
-                fetch("http://localhost:5678/code", {
+                fetch("https://code-converter-z0he.onrender.com/code", {
                     method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -68,7 +68,7 @@
             debugButton.addEventListener("click",()=>{
                 
                 let code=monaco.editor.getModels()[0].getValue()
-                fetch("http://localhost:5678/code/debug", {
+                fetch("https://code-converter-z0he.onrender.com/code/debug", {
                     method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -90,7 +90,7 @@
             checkQualityButton.addEventListener("click",()=>{
                 
                 let code=monaco.editor.getModels()[0].getValue()
-                fetch("http://localhost:5678/code/quality", {
+                fetch("https://code-converter-z0he.onrender.com/code/quality", {
                     method: "POST",
                 headers: {
                     "Content-Type": "application/json"
